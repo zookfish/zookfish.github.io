@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="学习,记录,总结"><title>nginx知识点 | zookfish</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">nginx知识点</h1><a id="logo" href="/.">zookfish</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">nginx知识点</h1><div class="post-meta">Mar 12, 2018<span> | </span><span class="category"><a href="/categories/服务器/">服务器</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#nginx知识点整理"><span class="toc-number">1.</span> <span class="toc-text">nginx知识点整理</span></a></li></ol></div></div><div class="post-content"><h4 id="nginx知识点整理"><a href="#nginx知识点整理" class="headerlink" title="nginx知识点整理"></a>nginx知识点整理</h4><ul>
+<li><p>编译运行环境</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y <span class="keyword">install</span> gcc gcc-c++ autoconf pcre pcre-devel make automake</span><br><span class="line">yum -y <span class="keyword">install</span> wget httpd-tools vim</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为什么是nginx</p>
+<ul>
+<li>io多路复用epoll<ul>
+<li>epoll与select，poll的区别<ul>
+<li>epoll 每次轮训的是就绪表,select和poll是轮训所有的fd(文件描述符)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>功能模块少,轻量级</li>
+<li>cpu的亲和</li>
+<li>sendFile 直接通过内核发送给socket</li>
+</ul>
+</li>
+<li><p>nginx的安装</p>
+<ul>
+<li><p><a href="http://nginx.org/en/linux_packages.html#stable" target="_blank" rel="noopener">安装连接</a></p>
+</li>
+<li><p>rpm -ql nginx 查看yum 方式安装nginx的文件目录</p>
+</li>
+<li><p>nginx -v 查看版本  -V 查看运行的参数</p>
+</li>
+<li>./usr/sbin/nginx  运行nginx</li>
+<li>常用的目录<ul>
+<li>/etc/lograte.d/nginx 配置日志输出方式</li>
+<li>/etc/nginx/nginx.conf  /etc/conf.d/default.conf 配置文件</li>
+<li>/etc/mime.types  设置http Conent-type与对应的数据类型</li>
+<li>/usr/lib/systemd/  守护进程启动  针对centos7</li>
+<li>/usr/share/nginx  nginx的帮助文档</li>
+<li>/var/cache/nginx   用于缓存</li>
+<li>/var/log/nginx     nginx的日志目录</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>nginx的基本配置</p>
+<ul>
+<li><p>/etc/nginx/nginx.conf</p>
+<ul>
+<li>nginx -t -c /etc/nginx/nginx.conf 检查当前的配置文件是否有语法错误</li>
+<li>nginx -s reload /etc/nginx/nginx.conf  重载配置文件</li>
+</ul>
+</li>
+<li><p>nginx的模块</p>
+<ul>
+<li><p>–with-http_stub_status_module 模块</p>
+<ul>
+<li>配置的语法规则<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">context location、<span class="keyword">server</span>  配置的模块在<span class="keyword">server</span>或者location下</span><br><span class="line">stub_staus; 配置的规则</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>–with-http_sub_module http响应内容的替换</p>
+  <figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sub_filter <span class="string">'原始'</span> <span class="string">'替换后'</span></span><br><span class="line">sub_filter_once on|off 只替换第一个还是全局替换</span><br><span class="line"></span><br><span class="line">--sbin-path=<span class="regexp">/usr/sbin</span><span class="regexp">/nginx --modules-path=/usr</span><span class="regexp">/lib64/nginx</span><span class="regexp">/modules --conf-path=/etc</span><span class="regexp">/nginx/nginx</span>.conf --error-log-path=<span class="regexp">/var/log</span><span class="regexp">/nginx/error</span>.log --http-log-path=<span class="regexp">/var/log</span><span class="regexp">/nginx/access</span>.log --pid-path=<span class="regexp">/var/run</span><span class="regexp">/nginx.pid --lock-path=/var</span><span class="regexp">/run/nginx</span>.lock --http-client-body-temp-path=<span class="regexp">/var/cache</span><span class="regexp">/nginx/client</span>_temp --http-proxy-temp-path=<span class="regexp">/var/cache</span><span class="regexp">/nginx/proxy</span>_temp --http-fastcgi-temp-path=<span class="regexp">/var/cache</span><span class="regexp">/nginx/fastcgi</span>_temp --http-uwsgi-temp-path=<span class="regexp">/var/cache</span><span class="regexp">/nginx/uwsgi</span>_temp --http-scgi-temp-path=<span class="regexp">/var/cache</span><span class="regexp">/nginx/scgi</span>_temp --user=nginx --group=nginx --<span class="keyword">with</span>-compat --<span class="keyword">with</span>-file-aio --<span class="keyword">with</span>-threads --<span class="keyword">with</span>-http_addition_module --<span class="keyword">with</span>-http_auth_request_module --<span class="keyword">with</span>-http_dav_module --<span class="keyword">with</span>-http_flv_module --<span class="keyword">with</span>-http_gunzip_module --<span class="keyword">with</span>-http_gzip_static_module --<span class="keyword">with</span>-http_mp4_module --<span class="keyword">with</span>-http_random_index_module --<span class="keyword">with</span>-http_realip_module --<span class="keyword">with</span>-http_secure_link_module --<span class="keyword">with</span>-http_slice_module --<span class="keyword">with</span>-http_ssl_module --<span class="keyword">with</span>-http_stub_status_module --<span class="keyword">with</span>-http_sub_module --<span class="keyword">with</span>-http_v2_module --<span class="keyword">with</span>-mail --<span class="keyword">with</span>-mail_ssl_module --<span class="keyword">with</span>-stream --<span class="keyword">with</span>-stream_realip_module --<span class="keyword">with</span>-stream_ssl_module --<span class="keyword">with</span>-stream_ssl_preread_module --<span class="keyword">with</span>-cc-opt=<span class="string">'-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -fPIC'</span> --<span class="keyword">with</span>-ld-opt=<span class="string">'-Wl,-z,relro -Wl,-z,now -pie'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>-limit_conn_module   连接请求限制</p>
+</li>
+<li><p>-limit_req_module    request请求限制</p>
+</li>
+<li><p>http_access_module   ip连接限制  基于客户端的ip,它只能识别访问的ip.如果客户端通过代理访问,服务端只能识别代理的ip</p>
+</li>
+<li>http_x_forworded_for 可以改善http_access_module 的局限</li>
+<li>http_auth_basic_module   用户的访问认证</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>+ nginx的静态web资源服务
+    + 接受客户端的一些静态资源的请求 (js/css/jpg/txt)
+    + gzip模块设置压缩
+    + 设置cache
+    + 跨域访问    Access-Control-Allow-Origin 请求地址  在服务端设置允许跨域访问的域名
+    + 防盗链   K.;
++ nginx的代理服务
+    + proxy_pass
+    + 正向代理
+    + 反向代理
+
++ nginx的负载均衡
+
+    + 定义upstream 配置proxy_pass 指向配置的upstream。默认的负载是轮询的策略
+
++ nginx的动态缓存
+</code></pre></div><div class="tags"><a href="/tags/nginx/">nginx</a></div><div class="post-nav"><a class="next" href="/2018/03/12/linux常用命令/">linux常用命令</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/nginx/" style="font-size: 15px;">nginx</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/事务/" style="font-size: 15px;">事务</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/nginx知识点/">nginx知识点</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/linux常用命令/">linux常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/简聊分布式事务/">简聊分布式事务</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.shixiaoquan.win/" title="shixiaoquan" target="_blank">shixiaoquan</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">zookfish.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
