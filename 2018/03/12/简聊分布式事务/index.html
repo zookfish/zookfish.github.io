@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="学习,记录,总结"><title>简聊分布式事务 | zookfish</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">简聊分布式事务</h1><a id="logo" href="/.">zookfish</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">简聊分布式事务</h1><div class="post-meta">Mar 12, 2018<span> | </span><span class="category"><a href="/categories/分布式/">分布式</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#分布式事务的解决方案"><span class="toc-number">1.</span> <span class="toc-text">分布式事务的解决方案</span></a></li></ol></div></div><div class="post-content"><h4 id="分布式事务的解决方案"><a href="#分布式事务的解决方案" class="headerlink" title="分布式事务的解决方案"></a>分布式事务的解决方案</h4><ul>
+<li>两阶段提交<ul>
+<li>准备阶段,协调者给参与者发起准备的消息,参与者分别要么返回失败,要么在本地执行事物(undohe redo),但不提交</li>
+<li>协调者接收参与者消息<ul>
+<li>如果收到失败的消息.则发送回滚的消息.参与者发送回滚完成,</li>
+<li>协调者取消事物如果收到成功的消息,则发起commit的消息,参与者发送完成,协调者完成事物</li>
+</ul>
+</li>
+<li>问题: <ul>
+<li>所有参与者在等待协调者发送消息的过程中都是同步阻塞的状态</li>
+<li>协调者发送commit宕机,会发生单点故障,有可能有一部分参与者没有收到commit的消息,即使协调者通过选举产生了新的leader,也不能确定这条事物是否已经成功执行(新的leader会收取不到一部分参与者发送确认的消息)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>三阶段提交<ul>
+<li>询问阶段: 协调者询问参与者的状态(是否可以执行事物)<ul>
+<li>所有参与返回ok,则进入准备状态</li>
+<li>返回no就不用继续执行了</li>
+</ul>
+</li>
+<li>预提交阶段: 协调者发送预提交,参与者在本地执行事物(写redo和undo的日志),并返回确认消息<ul>
+<li>所有的参与者都ok,则等待参与者发送docommit</li>
+<li>有失败的,参与者发送取消事物的消息(或者等待超时),参与者中断事物</li>
+</ul>
+</li>
+<li>docommit阶段: 向所有的参与者发送提交事物,等待参与者返回ack,然后在完成事物</li>
+<li>问题: 引入了超时的机制: 解决了宕机的问题,超时迅速释放资源</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>base模型<ul>
+<li>TODO</li>
+</ul>
+</li>
+<li><p>CAP 理论</p>
+<ul>
+<li>TODO</li>
+</ul>
+</li>
+<li><p>刚性事物</p>
+<ul>
+<li>全局事物管理</li>
+</ul>
+</li>
+<li>柔性事物<ul>
+<li>可靠消息最终一致 (异步确认)<ul>
+<li>保证消息的可靠:<ul>
+<li>主动发先发送消息给消息中间件,消息中间件落地消息到存储数据库,将该消息标志位待处理</li>
+<li>向主动方发送存储成功或者失败,成功主动方执行业务操作,失败不执行</li>
+<li>主动方执行业务操作之后发送执行成功或者失败的消息给消息中间件</li>
+<li>成功,消息中间件将消息标记为待发送,失败则删除存储在数据中的消息</li>
+<li>被动方监听待发送的消息,消费成功发送ack确认的消息给中间件<ul>
+<li>消息重复消费的问题(中间件不能正确的收到ack的确认,会导致消息中间件重复发送),被动方要实现对消息的业务处理幂等性</li>
+<li>消息重新发送的次数限制</li>
+</ul>
+</li>
+<li>中间件接收到ack则删除消息</li>
+</ul>
+</li>
+<li>问题: 没有现成的mq支持该系统</li>
+<li>变通: 独立的消息服务设计<ul>
+<li>自建独立的消息服务子系统（在消息发送到中间件之前执行消息的可靠性控制）</li>
+<li>dubbo的refrence服务采用异步的方式来调用服务</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TCC型事物解决方案(两阶段提交,补偿)<ul>
+<li>参考tcc-transaction的实现<ul>
+<li>主服务发起try,从服务发起try,成功后主服务发起confirm/cancel,调用从服务发起confirm或者cancel</li>
+<li>事物出现异常.启用定时任务扫描日志找出</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>最大努力通知型(非可靠消息,定期校对)<ul>
+<li>主动方设置发送的规则，不用基于可靠消息。<ul>
+<li>定时的任务发送(主动方设置发送的规则【重发的次数,发送的频率】)</li>
+</ul>
+</li>
+<li>消息可能会丢失,提供给下游一个查询接口</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div><div class="tags"><a href="/tags/事务/">事务</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/事务/" style="font-size: 15px;">事务</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/简聊分布式事务/">简聊分布式事务</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.shixiaoquan.win/" title="shixiaoquan" target="_blank">shixiaoquan</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">zookfish.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
