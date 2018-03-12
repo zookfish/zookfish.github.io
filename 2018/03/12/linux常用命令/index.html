@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="学习,记录,总结"><title>linux常用命令 | zookfish</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">linux常用命令</h1><a id="logo" href="/.">zookfish</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">linux常用命令</h1><div class="post-meta">Mar 12, 2018<span> | </span><span class="category"><a href="/categories/服务器/">服务器</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#就该这么玩linux"><span class="toc-number">1.</span> <span class="toc-text">就该这么玩linux</span></a></li></ol></div></div><div class="post-content"><h3 id="就该这么玩linux"><a href="#就该这么玩linux" class="headerlink" title="就该这么玩linux"></a>就该这么玩linux</h3><blockquote>
+<p>工作马马虎虎,只想在兴趣和游戏中寻觅快活,充其量只能获得一时的快感,决不能尝到心底涌出的惊喜和快乐,但来自工作的喜悦并不像糖果那样—放进嘴里就甜味十足,而是需要从苦劳与艰辛中渗出,因此我们聚精会神,孜孜不倦,克服艰辛后的成就感,世界上没有哪种喜悦可以类比</p>
+</blockquote>
+<ul>
+<li>yum 工具 简化rpm安装的工具&lt;可以自动分析出软件包所需要的依赖&gt;<ul>
+<li>yum repolist all 列出所有可用的yum仓库</li>
+<li>yum list all 列出仓库所有可用的软件包</li>
+<li>yum install/reinstall/update/remove 包名称  安装/重新安装/更新/移除</li>
+<li>yum grouplist  系统安装的软件包组</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>内核用来驱动硬件,分配资源,管理活动。不能直接让用户来操作,所以开发人员需要基于系统的调用接口来操作内核,控制计算机</p>
+</blockquote>
+<ul>
+<li><p>常用的按键操作</p>
+<ul>
+<li>空格向下翻页</li>
+<li>page-up 向上翻页</li>
+<li>/关键字  从上向下搜索</li>
+<li>?关键字  从下向上搜索</li>
+<li>n 定位到下一个关键字</li>
+<li>N 上一个关键字</li>
+</ul>
+</li>
+<li><p>wget 下载文件</p>
+</li>
+<li>uname -a  查看系统内核版本</li>
+<li>uptime 查看系统负载</li>
+<li>free -m 查看内存运行状况  free -g</li>
+<li>who 查看当前系统的登陆状况</li>
+<li><p>last 系统所有的登录记录</p>
+</li>
+<li><p>查看文件命令</p>
+<ul>
+<li>cat -n 文件名  显示行数查看</li>
+<li>cat -b 排除空行显示行数查看</li>
+<li>more -数字 以多少航为一页查看</li>
+<li>head -n 20 查看文件前20行</li>
+<li>tail -n 20 查看文件后20行</li>
+<li>tail -f 持续刷新显示文件 &lt;查看日志很管用&gt;</li>
+</ul>
+</li>
+<li><p>文件操作</p>
+<ul>
+<li>touch </li>
+<li>mkdir 创建目录</li>
+<li>cp 源文件 目标文件  复制   cp -r 递归复制</li>
+<li>mv 移动文件 可以重命名文件</li>
+<li>硬链接和软连接<ul>
+<li>硬链接 指向的是文件里面的数据(删除源文件仍然可用)   ln 源文件  目标文件 </li>
+<li>软连接指向的文件名(删除源文件不可用)           ln -s 源文件 目标文件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>用户管理</p>
+<ul>
+<li>useradd/userdel/usermod 添加/删除/修改 用户</li>
+<li>groupadd 添加组</li>
+</ul>
+</li>
+<li><p>压缩文件</p>
+<ul>
+<li>tar -xzvf 解压</li>
+<li>tar -czvf 压缩</li>
+</ul>
+</li>
+<li><p>查找</p>
+<ul>
+<li>grep 查找内容<ul>
+<li>grep -A 3 -i “example” demo_file 在文件中查找关键字以及之后的三行</li>
+<li>grep -r “example” * 递归查找</li>
+</ul>
+</li>
+<li><p>find 地址 -参数 查找文件</p>
+<ul>
+<li>find -iname “a.js”   查找名称为a.js的文件</li>
+<li>find / -size +21k   查找大小大于21kb的文件</li>
+<li>find / -size -21k   小于</li>
+</ul>
+<ul>
+<li><blockquote>
+<p>输出   man bash &gt; 1.txt   man bash &gt;&gt; 1.txt 追加输入</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>&lt; 输入   wc -l &lt; 1.txt</li>
+<li>tail 查看<ul>
+<li>tail -n 300 demo.txt 查看文件的最后300行</li>
+<li>tail -f demo.txt  实时查看</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>杂货</p>
+<ul>
+<li>echo <code>uname -a</code>  反引号里面的会被linux当做命令来执行</li>
+<li>\$ 会转译</li>
+<li>date +%Y年%m月%d号 查看系统的时间</li>
+<li>cal 查看系统的日历</li>
+<li>chown修改文件所有者 chgrp修改用户组 chomd修改文件的权限 chmod 421 文件名  给文件增加可读可写可执行的权限</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>查看磁盘和内存、进程    </p>
+<ul>
+<li>df    查看磁盘使用情况   df -k -h</li>
+<li>du -h 查看当前路径占用的硬盘大小</li>
+<li>free  查看内存使用</li>
+<li>ps -efH 查看</li>
+<li>kiss -9 进程id 杀死进程</li>
+</ul>
+</li>
+<li><p>linux的一切都是文件，命令也是文件。执行一条命令</p>
+<ul>
+<li>如果以绝对/相对路径输入命令则直接执行</li>
+<li>检查命令是否是别名命令</li>
+<li>由bash判断是内部命令还是外部命令</li>
+<li>通过$PATH环境变量中定义的路径去做查找</li>
+<li>export 命令将定义好的变量定义为全局范围</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>vim 命令模式|末行模式|编辑模式</p>
+<ul>
+<li><p>命令模式快捷键</p>
+<ul>
+<li>dd 删除光标所在行</li>
+<li>5dd 删除光标所在的5行</li>
+<li>yy 复制光标所在行  5yy</li>
+<li>p 复制刚刚删除的或者复制的行</li>
+<li>/字符串  搜索字符串（从上往下）  ?字符串 –&gt;从下往上</li>
+</ul>
+</li>
+<li><p>末行模式</p>
+<ul>
+<li>w 保存</li>
+<li>q 退出</li>
+<li>q! 强制退出（放弃修改）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>[ -x test2.sh ] 判断test2.sh是否是可执行的  注意[]前后都有一个空格</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">ping -c 3 -i 0.2 -W 3 <span class="variable">$1</span> &amp;&gt; /dev/null</span><br><span class="line"><span class="comment"># $? 表示上一条命令执行的结果</span></span><br><span class="line"><span class="keyword">if</span> [ $? -eq 0 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"HOST <span class="variable">$1</span> up"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"HOST <span class="variable">$1</span> down"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>at 时间 创建一个一次性的任务</p>
+</li>
+<li>crontab -e 创建定时任务<ul>
+<li><ul>
+<li><ul>
+<li><ul>
+<li><ul>
+<li><ul>
+<li>cron表达式的格式  分钟 小时 日期 月份 星期&lt;星期的取值是0-7,0和7都表示周日&gt;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>理解linux的文件权限</p>
+<ul>
+<li><p>原理：文件有三种权限</p>
+<ul>
+<li>r 4  可读</li>
+<li>w 2  可写</li>
+<li>x 1  可运行<ul>
+<li>文件描述符的第一位可以表示：</li>
+</ul>
+</li>
+<li>-普通文件</li>
+<li>d 目录</li>
+<li>p 管道文件</li>
+<li>l 连接文件</li>
+<li>c 字符设备文件</li>
+<li>b 块状设备文件<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> - 普通文件  第一个-</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> rw- 文件所有者可读可写  这里的-就是个占位符</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> r-- 文件所在的用户组可读</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> r-- 其它人可读</span></span><br><span class="line">-rw-r--r--</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>授权操作</p>
+<ul>
+<li>chown oracle:dba demo.sh     将demo.sh文件授权给oracle用户dba组</li>
+<li>chmod ug+rwx demo.sh  同时改变文件所属用户和组以及读写执行权限</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>linux文件目录<ul>
+<li>boot开机启动</li>
+<li>dev 外接设备</li>
+<li>etc 配置文件</li>
+<li>home 用户主目录</li>
+<li>bin 基本命令</li>
+<li>lib 函数库</li>
+<li>sbin 开机需要用到的</li>
+<li>media 挂在目录</li>
+<li>opt 放置三方软件</li>
+<li>root 系统管理员文件</li>
+<li>srv 网络服务数据</li>
+<li>tmp 临时文件目录</li>
+<li>usr 用户自定义目录</li>
+<li>var 经常变化的目录  日志文件</li>
+</ul>
+</li>
+<li>mount 文件系统  挂载目录</li>
+<li>unmount 文件系统</li>
+</ul>
+<ul>
+<li>拾忆<ul>
+<li>自定义开放端口 <ul>
+<li>/etc/sysconfig/iptables</li>
+<li>service iptables restart 使修改的端口生效</li>
+</ul>
+</li>
+<li>查看端口占用 <ul>
+<li>netstat -anp</li>
+</ul>
+</li>
+<li>centos默认使用firewall-cmd来管理端口<ul>
+<li>添加端口  firewall-cmd –zone=public –add-port=80/tcp –permanent</li>
+<li>firewall-cmd –reload 重启</li>
+<li>firewall-cmd –list -ports 查看开放的端口</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>needsomething todo</li>
+</ul>
+</div><div class="tags"><a href="/tags/linux/">linux</a></div><div class="post-nav"><a class="next" href="/2018/03/12/简聊分布式事务/">简聊分布式事务</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/服务器/">服务器</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/事务/" style="font-size: 15px;">事务</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/linux常用命令/">linux常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/12/简聊分布式事务/">简聊分布式事务</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.shixiaoquan.win/" title="shixiaoquan" target="_blank">shixiaoquan</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">zookfish.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
